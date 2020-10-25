@@ -123,18 +123,9 @@ const FoodDetails: React.FC = () => {
   }
 
   function handleDecrementFood(): void {
-    const quantity = foodQuantity - 1 > 0 ? foodQuantity - 1 : 0;
-    setFoodQuantity(quantity);
+    const quantity = foodQuantity - 1;
 
-    if (quantity === 0) {
-      const newExtras: Extra[] = [];
-      extras.forEach(extra => {
-        const newExtra = { ...extra, quantity: 0 };
-        newExtras.push(newExtra);
-      });
-
-      setExtras(newExtras);
-    }
+    if (quantity > 0) setFoodQuantity(quantity);
   }
 
   const toggleFavorite = useCallback(async () => {
@@ -159,7 +150,7 @@ const FoodDetails: React.FC = () => {
     const order = {
       ...food,
       extras,
-      total: cartTotal,
+      price: cartTotal,
       product_id: food.id,
       id: null,
     };
