@@ -63,24 +63,18 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     async function loadFoods(): Promise<void> {
-      const { data } = await api.get<FoodCategory[]>('foods');
+      let queryParams = `foods?name_like=${searchValue}`;
+      if (selectedCategory)
+        queryParams = `foods?category_like=${selectedCategory}`;
 
-      let foodsData = data.map(food => {
+      const { data } = await api.get<FoodCategory[]>(queryParams);
+
+      const foodsData = data.map(food => {
         const formattedPrice = formatValue(food.price);
         Object.assign(food, { formattedPrice });
         return food;
       });
 
-      if (searchValue && searchValue.length > 0) {
-        foodsData = foodsData.filter(food =>
-          food.name.toLowerCase().includes(searchValue.toLowerCase()),
-        );
-      }
-      if (selectedCategory) {
-        foodsData = foodsData.filter(
-          food => food.category === selectedCategory,
-        );
-      }
       setFoods(foodsData);
     }
     loadFoods();
@@ -147,6 +141,7 @@ const Dashboard: React.FC = () => {
         <FoodsContainer>
           <Title>Pratos</Title>
           <FoodList>
+            {console.log({ foods })}
             {foods.map(food => (
               <Food
                 key={food.id}
