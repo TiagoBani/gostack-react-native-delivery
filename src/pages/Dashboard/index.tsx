@@ -28,6 +28,10 @@ import {
   FoodPricing,
 } from './styles';
 
+interface FoodCategory extends Food {
+  category: number;
+}
+
 interface Food {
   id: number;
   name: string;
@@ -59,13 +63,19 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     async function loadFoods(): Promise<void> {
-      const response = await api.get('foods');
+      const response = await api.get<FoodCategory[]>('foods');
 
-      const result = response.data.filter(
-        food =>
-          food.category === selectedCategory &&
-          food.name.toLowerCase().includes(searchValue.toLowerCase()),
-      );
+      const result = response.data
+        .filter(
+          food =>
+            food.category === selectedCategory &&
+            food.name.toLowerCase().includes(searchValue.toLowerCase()),
+        )
+        .map(food => {
+          const formattedPrice = formatValue(food.price);
+          Object.assign(food, { formattedPrice });
+          return food;
+        });
       setFoods(result);
     }
     loadFoods();
