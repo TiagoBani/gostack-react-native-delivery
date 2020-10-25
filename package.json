@@ -3,11 +3,14 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "prestart": "yarn install",
     "android": "react-native run-android",
+    "postandroid": "adb reverse tcp:3333 tcp:3333",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "server": "yarn json-server server.json -p 3333"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",
