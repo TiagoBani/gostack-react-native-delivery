@@ -32,21 +32,19 @@ const Orders: React.FC = () => {
   const [orders, setOrders] = useState<Food[]>([]);
   const navigation = useNavigation();
 
-  useFocusEffect(
-    useCallback(() => {
-      async function loadOrders(): Promise<void> {
-        const { data } = await api.get<Food[]>('orders');
-        data.map(order => {
-          const formattedPrice = formatValue(order.price);
-          Object.assign(order, { formattedPrice });
-          return order;
-        });
-        setOrders(data);
-      }
+  useEffect(() => {
+    async function loadOrders(): Promise<void> {
+      const { data } = await api.get<Food[]>('orders');
+      data.map(order => {
+        const formattedPrice = formatValue(order.price);
+        Object.assign(order, { formattedPrice });
+        return order;
+      });
+      setOrders(data);
+    }
 
-      loadOrders();
-    }, []),
-  );
+    loadOrders();
+  }, []);
 
   const handleNavigateFood = useCallback(
     (id: number) => {

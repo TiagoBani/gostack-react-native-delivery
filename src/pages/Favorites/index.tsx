@@ -32,21 +32,19 @@ const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState<Food[]>([]);
   const navigation = useNavigation();
 
-  useFocusEffect(
-    useCallback(() => {
-      async function loadFavorites(): Promise<void> {
-        const { data } = await api.get<Food[]>('favorites');
-        data.map(favorite => {
-          const formattedPrice = formatValue(favorite.price);
-          Object.assign(favorite, { formattedPrice });
-          return favorite;
-        });
-        setFavorites(data);
-      }
+  useEffect(() => {
+    async function loadFavorites(): Promise<void> {
+      const { data } = await api.get<Food[]>('favorites');
+      data.map(favorite => {
+        const formattedPrice = formatValue(favorite.price);
+        Object.assign(favorite, { formattedPrice });
+        return favorite;
+      });
+      setFavorites(data);
+    }
 
-      loadFavorites();
-    }, []),
-  );
+    loadFavorites();
+  }, []);
 
   const handleNavigateFood = useCallback(
     (id: number) => {
